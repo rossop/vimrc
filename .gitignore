@@ -1,0 +1,13 @@
+# Ignore everything
+*
+
+# Don't ignore This files:
+!.gitignore
+!.vimrc
+!.vimrc*
+#etc..
+
+#even if they are in subdirectoris
+#!*/
+
+# An optional prefix ! which negates the pattern; any matching file excluded by a previous pattern will become included again. If a negated pattern matches, this will override lower precedence patterns sources.
