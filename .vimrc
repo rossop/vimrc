@@ -12,6 +12,8 @@
 
 " Automatic reloading of .vimrc
  autocmd! bufwritepost .vimrc source %
+" Preserve files in clipboard after exiting vim
+ autocmd VimLeave * call system("xsel -ib", getreg('+'))
 
 " Better copy & paste
 " When you want to paste large blocks of code into vim, press F2 before you
