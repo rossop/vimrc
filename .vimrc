@@ -1,13 +1,31 @@
 " ============================================================================
 " ============================================================================
-"														VIMRC CHANGES LOG
+"								VIMRC CHANGES LOG
 " ============================================================================
 " ============================================================================
 " inspiration from VIMCAST					Oct 2017
 
 
 " ============================================================================
-"										SETTINGS
+"									COLORS
+" ============================================================================
+"Invisible character colors 
+"highlight NonText guifg=#4a4a59
+"highlight SpecialKey guifg=#4a4a59
+" highlight Normal ctermfg=grey ctermbg=darkgrey
+"Colorscheme
+	set number " make it not happen if is txt
+	syntax enable
+	let g:solarized_termcolors=256
+	colorscheme solarized
+	set background=dark
+"	autocmd Filetype text :call color blackboard
+" ============================================================================
+
+
+
+" ============================================================================
+"									SETTINGS
 " ============================================================================
 "shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
@@ -36,6 +54,40 @@ map <D-8> 8gt
 map <D-9> 9gt
 map <D-0> :tablast<CR>
 
+" Edit shortcuts
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
+
+"Soft wrapping ---  LATEX use 
+command! -nargs=* Wrap set wrap linebreak nolist
+"Move around soft wrap
+vmap <D-j> gj
+vmap <D-k> gk
+vmap <D-4> g$
+vmap <D-6> g^
+vmap <D-0> g^
+nmap <D-j> gj
+nmap <D-k> gk
+nmap <D-4> g$
+nmap <D-6> g^
+nmap <D-0> g
+
+"Spelling shortcut
+" Toggle spell checking on and off with `,s`
+let mapleader = ","
+nmap <silent> <leader>s :set spell!<CR>
+
+" Quick .vimrc open
+let mapleader = ","
+nmap <leader>v :tabedit $MYVIMRC<CR>
+
+" Set region to British English
+set spelllang=en_gb
+
+
 " Use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
 
@@ -49,7 +101,7 @@ if has("autocmd")
   " Syntax of these languages is fussy over tabs Vs spaces
   autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
   autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-  autocmd FileType vim  setlocal ts=2 sts=2 sw=2 noexpandtab
+  autocmd FileType vim  setlocal ts=2 sts=2 sw=2 expandtab
 
   " Customisations based on house-style (arbitrary)
   autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
@@ -68,19 +120,6 @@ autocmd BufWritePre *.py,*.js :call <SID>StripTrailingWhitespaces()
 " BUFFERS and MULTIPLE WINDOWS
 "Deal with hidden buffers
 set hidden
-
-
-" ============================================================================
-"										COLORS
-" ============================================================================
-"Invisible character colors 
-highlight NonText guifg=#4a4a59
-highlight SpecialKey guifg=#4a4a59
-" highlight Normal ctermfg=grey ctermbg=darkgrey
-"Colorscheme
-color blackboard
-" ============================================================================
-
 
 " ============================================================================
 " 				FUNCTIONS
@@ -126,3 +165,34 @@ function! <SID>StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+"Restore cursor position and highlight sintax
+if has("autocmd")
+  " Enable filetype detection
+  filetype plugin indent on
+
+  " Restore cursor position
+  autocmd BufReadPost *
+        \  if line("'\"") > 1 && line("'\"") <= line("$") |
+        \    exe "normal! g`\"" |
+        \  endif
+  endif
+if &t_Co > 2 || has("gui_running")
+  " Enable syntax highlighting
+  syntax on
+endif
+
+
+" Source the vimrc file after saving it
+if has("autocmd")
+   autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+
+" Show syntax highlighting groups for word under cursor
+nmap <C-S-P> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+	if !exists("*synstack")
+		return
+	endif
+	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')
+endfunc
