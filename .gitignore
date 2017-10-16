@@ -5,6 +5,7 @@
 !.gitignore
 !.vimrc
 !.vimrc*
+!.vim/*
 #etc..
 
 #even if they are in subdirectoris

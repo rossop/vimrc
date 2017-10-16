@@ -1,200 +1,198 @@
-" ============================================
-" ------------------  LOG   ------------------
-" ============================================
-" Sample .vimrc file by Martin Brochhaus -github     Mar-2017
-" Added Supertab Currently not working               Apr-2017
-
-" ============================================
-" Note to myself:
-" DO NOT USE <C-z> FOR SAVING WHEN PRESENTING!
-" ============================================
-
-
-" Automatic reloading of .vimrc
- autocmd! bufwritepost .vimrc source %
-" Preserve files in clipboard after exiting vim
- autocmd VimLeave * call system("xsel -ib", getreg('+'))
-
-" Better copy & paste
-" When you want to paste large blocks of code into vim, press F2 before you
-" paste. At the bottom you should see ``-- INSERT (paste) --``.
- set pastetoggle=<F2>
- set clipboard=unnamed
-
-" Mouse and backspace
-"" set mouse=a  " on OSX press ALT and click
- set bs=2     " make backspace behave like normal again
-
-" Rebind <Leader> key
-" I like to have it here becuase it is easier to reach than the default and
-" it is next to ``m`` and ``n`` which I use for navigating between tabs.
- let mapleader = ","
-
-" Bind nohl
-" Removes highlight of your last search
-" ``<C>`` stands for ``CTRL`` and therefore ``<C-n>`` stands for ``CTRL+n``
- noremap <C-n> :nohl<CR>
- vnoremap <C-n> :nohl<CR>
- inoremap <C-n> :nohl<CR>
-
-" Quicksave command
- noremap <C-Z> :update<CR>
- vnoremap <C-Z> <C-C>:update<CR>
- inoremap <C-Z> <C-O>:update<CR>
-
-" Quick quit command
- noremap <Leader>e :quit<CR>  " Quit current window
- noremap <Leader>E :qa!<CR>   " Quit all windows
-
-" bind Ctrl+<movement> keys to move around the windows, instead of using Ctrl+w + <movement>
-" Every unnecessary keystroke that can be saved is good for your health :)
- map <c-j> <c-w>j
- map <c-k> <c-w>k
- map <c-l> <c-w>l
- map <c-h> <c-w>h
-
-" easier moving between tabs
- map <Leader>n <esc>:tabprevious<CR>
- map <Leader>m <esc>:tabnext<CR>
-
-" map sort function to a key
- vnoremap <Leader>s :sort<CR>
-
-" easier moving of code blocks
-" Try to go into visual mode (v), thenselect several lines of code here and
-" then press ``>`` several times.
- vnoremap < <gv  " better indentation
- vnoremap > >gv  " better indentation
-
-" Show whitespace
-" MUST be inserted BEFORE the colorscheme command
- autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
- au InsertLeave * match ExtraWhitespace /\s\+$/
-
-" Color scheme
-" mkdir -p ~/.vim/colors && cd ~/.vim/colors
-" wget -O wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
- set t_Co=256
- color wombat256mod
-
-
-" Enable syntax highlighting
-" You need to reload this file for the change to apply
- filetype off
- filetype plugin indent on
- syntax on
-
-" Showing line numbers and length
- set number  " show line numbers
- set tw=79   " width of document (used by gd)
- set nowrap  " don't automatically wrap on load
- set fo-=t   " don't automatically wrap text when typing
- set colorcolumn=80
- highlight ColorColumn ctermbg=233
-
-
-" easier formatting of paragraphs
- vmap Q gq
- nmap Q gqap
-
-
-" Useful settings
- set history=700
- set undolevels=700
-
-
-" Real programmers don't use TABs but spaces
- set tabstop=4
- set softtabstop=4
- set shiftwidth=4
- set shiftround
- set expandtab
-
-
-" Make search case insensitive
- set hlsearch
- set incsearch
- set ignorecase
- set smartcase
-
-
-" Disable stupid backup and swap files - they trigger too many events
-" for file system watchers
- set nobackup
- set nowritebackup
- set noswapfile
-
-" Setup Pathogen to manage your plugins mkdir -p ~/.vim/autoload ~/.vim/bundle
-" curl -so ~/.vim/autoload/pathogen.vim
-" https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim
-" Now you can install any plugin into a .vim/bundle/plugin-name/ folder
- call pathogen#infect()
+" ============================================================================
+" ============================================================================
+"								VIMRC CHANGES LOG
+" ============================================================================
+" ============================================================================
+" inspiration from VIMCAST					Oct 2017
 
 
 " ============================================================================
-" Python IDE Setup
+"									COLORS
+" ============================================================================
+"Invisible character colors 
+"highlight NonText guifg=#4a4a59
+"highlight SpecialKey guifg=#4a4a59
+" highlight Normal ctermfg=grey ctermbg=darkgrey
+"Colorscheme
+	set number " make it not happen if is txt
+	syntax enable
+	let g:solarized_termcolors=256
+	colorscheme solarized
+	set background=dark
+"	autocmd Filetype text :call color blackboard
 " ============================================================================
 
-" Settings for vim-powerline
-" cd ~/.vim/bundle
-" git clone git://github.com/Lokaltog/vim-powerline.git
- set laststatus=2
-
-" Settings for ctrlp
-" cd ~/.vim/bundle
-" git clone https://github.com/kien/ctrlp.vim.git
- let g:ctrlp_max_height = 30
- set wildignore+=*.pyc
- set wildignore+=*_build/*
- set wildignore+=*/coverage/*
-
-" Settings for python-mode
-" Note: I'm no longer using this. Leave this commented out
-" and uncomment the part about jedi-vim instead
-" cd ~/.vim/bundle
-" git clone https://github.com/klen/python-mode
-"" map <Leader>g :call RopeGotoDefinition()<CR>
-"" let ropevim_enable_shortcuts = 1
-"" let g:pymode_rope_goto_def_newwin = "vnew"
-"" let g:pymode_rope_extended_complete = 1
-"" let g:pymode_breakpoint = 0
-"" let g:pymode_syntax = 1
-"" let g:pymode_syntax_builtin_objs = 0
-"" let g:pymode_syntax_builtin_funcs = 0
-"" map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
-
-" Settings for jedi-vim
-" cd ~/.vim/bundle
-" git clone git://github.com/davidhalter/jedi-vim.git
- let g:jedi#usages_command = "<leader>z"
- let g:jedi#popup_on_dot = 0
- let g:jedi#popup_select_first = 0
- map <Leader>b Oimport ipdb; ipdb.set_trace() # BREAKPOINT<C-c>
-
-" Better navigating through omnicomplete option list
-" See http://stackoverflow.com/questions/2170023/how-to-map-keys-for-popup-menu-in-vim
- set completeopt=longest,menuone
- function! OmniPopup(action)
-     if pumvisible()
-         if a:action == 'j'
-             return "\<C-N>"
-         elseif a:action == 'k'
-             return "\<C-P>"
-         endif
-     endif
-     return a:action
- endfunction
-
- inoremap <silent><C-j> <C-R>=OmniPopup('j')<CR>
- inoremap <silent><C-k> <C-R>=OmniPopup('k')<CR>
 
 
-" Python folding
-" mkdir -p ~/.vim/ftplugin
-" wget -O ~/.vim/ftplugin/python_editing.vim http://www.vim.org/scripts/download_script.php?src_id=5492
- set nofoldenable
+" ============================================================================
+"									SETTINGS
+" ============================================================================
+"shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+"shortcut stripping trailing whitespaces
+	nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
+
+"shortcut for indents
+nmap <D-[> <<
+nmap <D-]> >>
+vmap <D-[> <gv
+vmap <D-]> >gv
+
+"shortcut for Multiple Tabs
+"	Tab movement shortcuts -- add a system dependent comand so that it does not 
+"	crash for linux
+map <D-S-]> gt
+map <D-S-[> gT
+map <D-1> 1gt
+map <D-2> 2gt
+map <D-3> 3gt
+map <D-4> 4gt
+map <D-5> 5gt
+map <D-6> 6gt
+map <D-7> 7gt
+map <D-8> 8gt
+map <D-9> 9gt
+map <D-0> :tablast<CR>
+
+" Edit shortcuts
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>ew :e %%
+map <leader>es :sp %%
+map <leader>ev :vsp %%
+map <leader>et :tabe %%
+
+"Soft wrapping ---  LATEX use 
+command! -nargs=* Wrap set wrap linebreak nolist
+"Move around soft wrap
+vmap <D-j> gj
+vmap <D-k> gk
+vmap <D-4> g$
+vmap <D-6> g^
+vmap <D-0> g^
+nmap <D-j> gj
+nmap <D-k> gk
+nmap <D-4> g$
+nmap <D-6> g^
+nmap <D-0> g
+
+"Spelling shortcut
+" Toggle spell checking on and off with `,s`
+let mapleader = ","
+nmap <silent> <leader>s :set spell!<CR>
+
+" Quick .vimrc open
+let mapleader = ","
+nmap <leader>v :tabedit $MYVIMRC<CR>
+
+" Set region to British English
+set spelllang=en_gb
 
 
+" Use the same symbols as TextMate for tabstops and EOLs
+set listchars=tab:▸\ ,eol:¬
+
+"Set Tab default settings - use "Stab" to change
+set ts=4 sts=4 sw=4 noexpandtab
+" Only do this part when compiled with support for autocommands
+if has("autocmd")
+  " Enable file type detection
+  filetype on
+
+  " Syntax of these languages is fussy over tabs Vs spaces
+  autocmd FileType make setlocal ts=8 sts=8 sw=8 noexpandtab
+  autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType vim  setlocal ts=2 sts=2 sw=2 expandtab
+
+  " Customisations based on house-style (arbitrary)
+  autocmd FileType html setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType css setlocal ts=2 sts=2 sw=2 expandtab
+  autocmd FileType javascript setlocal ts=4 sts=4 sw=4 noexpandtab
+  autocmd FileType python  setlocal ts=4 sts=4 sw=4 noexpandtab
+  " Treat .rss files as XML
+  autocmd BufNewFile,BufRead *.rss setfiletype xml
+endif
+
+"Automatically strip whitelines
+autocmd BufWritePre *.py,*.js :call <SID>StripTrailingWhitespaces()
 
 
+" ============================================================================
+" BUFFERS and MULTIPLE WINDOWS
+"Deal with hidden buffers
+set hidden
 
+" ============================================================================
+" 				FUNCTIONS
+" ============================================================================
+
+" Set tabstop, softtabstop and shiftwidth to the same value
+command! -nargs=* Stab call Stab()
+function! Stab()
+  let l:tabstop = 1 * input('set tabstop = softtabstop = shiftwidth = ')
+  if l:tabstop > 0
+    let &l:sts = l:tabstop
+    let &l:ts = l:tabstop
+    let &l:sw = l:tabstop
+  endif
+  call SummarizeTabs()
+endfunction
+
+function! SummarizeTabs()
+  try
+    echohl ModeMsg
+    echon ' tabstop='.&l:ts
+    echon ' shiftwidth='.&l:sw
+    echon ' softtabstop='.&l:sts
+    if &l:et
+      echon ' expandtab'
+    else
+      echon ' noexpandtab'
+    endif
+  finally
+    echohl None
+  endtry
+endfunction
+
+"Strip Trailing Whitespaces
+function! <SID>StripTrailingWhitespaces()
+    " Preparation: save last search, and cursor position.
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    " Do the business:
+    %s/\s\+$//e
+    " Clean up: restore previous search history, and cursor position
+    let @/=_s
+    call cursor(l, c)
+endfunction
+
+"Restore cursor position and highlight sintax
+if has("autocmd")
+  " Enable filetype detection
+  filetype plugin indent on
+
+  " Restore cursor position
+  autocmd BufReadPost *
+        \  if line("'\"") > 1 && line("'\"") <= line("$") |
+        \    exe "normal! g`\"" |
+        \  endif
+  endif
+if &t_Co > 2 || has("gui_running")
+  " Enable syntax highlighting
+  syntax on
+endif
+
+
+" Source the vimrc file after saving it
+if has("autocmd")
+   autocmd bufwritepost .vimrc source $MYVIMRC
+endif
+
+" Show syntax highlighting groups for word under cursor
+nmap <C-S-P> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+	if !exists("*synstack")
+		return
+	endif
+	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')
+endfunc
