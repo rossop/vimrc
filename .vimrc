@@ -9,16 +9,24 @@
 " ============================================================================
 "									COLORS
 " ============================================================================
-"Invisible character colors 
-"highlight NonText guifg=#4a4a59
 "highlight SpecialKey guifg=#4a4a59
 " highlight Normal ctermfg=grey ctermbg=darkgrey
+"-----------------------------------------------------------------------------
+"Show lines numbers and length
+"-----------------------------------------------------------------------------
+set number  " make it not happen if is txt
+set tw=79   " width of the document (used by gd)
+set nowrap  " don't automatically wrap on load
+set fo-=t   " don't automatically wrap text when typing
+set colorcolumn=80
+"-----------------------------------------------------------------------------
 "Colorscheme
-	set number " make it not happen if is txt
-	syntax enable
-	let g:solarized_termcolors=256
-	colorscheme solarized
-	set background=dark
+"-----------------------------------------------------------------------------
+syntax enable
+let g:solarized_termcolors=256
+colorscheme solarized
+set background=dark
+  
 "	autocmd Filetype text :call color blackboard
 " ============================================================================
 
@@ -27,18 +35,33 @@
 " ============================================================================
 "									SETTINGS
 " ============================================================================
+"avoid pressing shift when wanting to recall :
+nnoremap ; :
+
+"------------------------------------------------------------------------------
+"Avoid using arrows - positive reinforcement
+"------------------------------------------------------------------------------
+"let mapleader = ","
+"nmap <leader>a :call <SID>arrows!()<CR>
+
+"------------------------------------------------------------------------------
 "shortcut to rapidly toggle `set list`
+"------------------------------------------------------------------------------
 nmap <leader>l :set list!<CR>
 "shortcut stripping trailing whitespaces
-	nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
+  nnoremap <silent> <F5> :call <SID>StripTrailingWhitespaces()<CR>
 
+"-----------------------------------------------------------------------------
 "shortcut for indents
+"-----------------------------------------------------------------------------
 nmap <D-[> <<
 nmap <D-]> >>
 vmap <D-[> <gv
 vmap <D-]> >gv
 
+"------------------------------------------------------------------------------
 "shortcut for Multiple Tabs
+"------------------------------------------------------------------------------
 "	Tab movement shortcuts -- add a system dependent comand so that it does not 
 "	crash for linux
 map <D-S-]> gt
@@ -54,14 +77,18 @@ map <D-8> 8gt
 map <D-9> 9gt
 map <D-0> :tablast<CR>
 
+"------------------------------------------------------------------------------
 " Edit shortcuts
+"------------------------------------------------------------------------------
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
 map <leader>ew :e %%
 map <leader>es :sp %%
 map <leader>ev :vsp %%
 map <leader>et :tabe %%
 
+"------------------------------------------------------------------------------
 "Soft wrapping ---  LATEX use 
+"------------------------------------------------------------------------------
 command! -nargs=* Wrap set wrap linebreak nolist
 "Move around soft wrap
 vmap <D-j> gj
@@ -75,7 +102,9 @@ nmap <D-4> g$
 nmap <D-6> g^
 nmap <D-0> g
 
+"------------------------------------------------------------------------------
 "Spelling shortcut
+"------------------------------------------------------------------------------
 " Toggle spell checking on and off with `,s`
 let mapleader = ","
 nmap <silent> <leader>s :set spell!<CR>
@@ -87,6 +116,9 @@ nmap <leader>v :tabedit $MYVIMRC<CR>
 " Set region to British English
 set spelllang=en_gb
 
+"------------------------------------------------------------------------------
+"White Spaces
+"------------------------------------------------------------------------------
 
 " Use the same symbols as TextMate for tabstops and EOLs
 set listchars=tab:▸\ ,eol:¬
@@ -195,4 +227,18 @@ function! <SID>SynStack()
 		return
 	endif
 	echo map(synstack(line('.'), col('.')), 'synIDattr(v:val,"name")')
-endfunc
+endfunction
+
+"------------------------------------------------------------------------------
+"Avoid using arrows - positive reinforcement
+"------------------------------------------------------------------------------
+"function! <SID>arrows!()
+nnoremap <up> <nop>
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+"endfunction
