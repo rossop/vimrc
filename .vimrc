@@ -242,3 +242,5 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 "endfunction
+" shortcut for commenting in python and ruby
+" :linstrt,linends/^/#/
