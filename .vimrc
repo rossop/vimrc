@@ -4,7 +4,14 @@
 " ============================================================================
 " ============================================================================
 " inspiration from VIMCAST					Oct 2017
+" added SOLARIZED plugin       		  		Apr 2024
 
+
+" Initialize vim-plug plugin manager
+call plug#begin('~/.vin/plugged')
+" Add your plugins here
+Plug 'altercation/vim-colors-solarized'
+call plug#end()
 
 " ============================================================================
 "									COLORS
@@ -165,6 +172,28 @@ function! <SID>StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+" ============================================================================
+"                 ALE CONFIGURATION
+" ============================================================================
+" Enable ALE for linting and syntax checking
+let g:ale_enable = 1
+
+" Lint on text change and file save
+let g:ale_lint_on_text_changed = 'always'
+let g:ale_lint_on_save = 1
+
+" Specify linters to use for specific filetypes
+let g:ale_linters = {
+\ 'python': ['flake8', 'mypy'],
+\ 'javascript': ['eslint'],
+\}
+
+" Enable fixing issues on file save
+let g:ale_fix_on_save = 1
+
+" ============================================================================
+
 
 "Restore cursor position and highlight sintax
 if has("autocmd")
